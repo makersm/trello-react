@@ -4,6 +4,7 @@ Trello Page Using React
 
 ## Stack
 - React
+- React-Redux
 
 ## Usage
 Prepare git, node package manager(npm, yarn ...)
