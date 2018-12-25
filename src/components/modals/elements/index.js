@@ -1,8 +1,10 @@
 import CheckList from './checklist';
 import CheckListItem from './checklistitem';
 import Actions from './actions';
+import ActionItem from './actionitem';
 import Activity from './activity';
 import ActivityItem from './activityitem';
+import AddComment from './addcomment';
 
 export {
     CheckList,
@@ -10,4 +12,6 @@ export {
     Actions,
     Activity,
     ActivityItem,
+    ActionItem,
+    AddComment,
 };

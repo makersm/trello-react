@@ -59,8 +59,39 @@ class CheckList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            percent: "0"
+            percent: "66",
+            checkListItemTotal: 3,
+            checkListItemDone: 2,
         }
+        this.setPercentageChange = this.setPercentageChange.bind(this);
+    }
+
+    componentDidMount() {
+
+    }
+
+    /**
+     * Pass to checklistitem to change state :: percentage
+     * @param status
+     */
+    setPercentageChange(status) {
+        let {checkListItemTotal, checkListItemDone} =  this.state;
+
+        switch (status) {
+            case 'checked':
+                checkListItemDone++;
+                break;
+            case 'unchecked':
+                checkListItemDone--;
+                break;
+        }
+
+        const percent = Math.floor(checkListItemDone / checkListItemTotal * 100);
+        this.setState({
+            ...this.state,
+            percent,
+            checkListItemDone
+        });
     }
 
     render() {
@@ -80,10 +111,9 @@ class CheckList extends Component {
                         <div className="checklist-progress-bar-current checklist-progress-bar-current-complete" style={{width: `${percent}%`}}></div>
                     </div>
                     <div className="checklist-items-list">
-                        <CheckListItem />
-                        <CheckListItem />
-                        <CheckListItem />
-                        <CheckListItem />
+                        <CheckListItem status="checked" handleClick={this.setPercentageChange} />
+                        <CheckListItem status="unchecked" handleClick={this.setPercentageChange}/>
+                        <CheckListItem status="checked" handleClick={this.setPercentageChange}/>
                     </div>
                 </div>
             </div>

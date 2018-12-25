@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CheckList, CheckListItem, Actions, Activity } from '../index';
+import { CheckList, CheckListItem, Actions, Activity, AddComment } from '../index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle, faFile, faCheckSquare, faComments } from '@fortawesome/free-regular-svg-icons';
@@ -219,12 +219,14 @@ class ModalDetail extends Component {
                             <div className="checklist-list window-module">
                                 <CheckList />
                             </div>
-                            <div className="window-module">
+                            <div>
+                                <AddComment />
                                 <Activity />
                             </div>
                         </div>
                         <div className="window-sidebar">
-                            <Actions />
+                            <Actions title="ADD TO CARD" />
+                            <Actions title="ACTIONS" />
                         </div>
                     </div>
                 </div>

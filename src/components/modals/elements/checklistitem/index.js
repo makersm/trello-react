@@ -123,23 +123,39 @@ const type = {
 class CheckListItem extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            status : "unchecked"
-        }
-        this.setStatusChange = this.setStatusChange.bind(this);
+        this.state = this.setStateFromProps(props);
+        this.setStateChange = this.setStateChange.bind(this);
     }
 
-    setStatusChange() {
+    /**
+     * Set State using Props
+     * @param props
+     * @returns {{status: string}}
+     */
+    setStateFromProps(props) {
+        let status = "unchecked";
+        if('status' in props){
+            status = props.status;
+        }
+        return { status : status };
+    }
+
+    /**
+     * Change state using click
+     */
+    setStateChange() {
         var typeToChange = this.state.status == "unchecked" ? "checked" : "unchecked";
         this.setState({
             status : typeToChange
         });
+
+        this.props.handleClick(typeToChange);
     }
 
     render() {
         const {status} = this.state;
         return (
-            <div className={`checklist-item ${type[status].className}`} onClick={this.setStatusChange}>
+            <div className={`checklist-item ${type[status].className}`} onClick={this.setStateChange}>
                 <InlineStyle />
                 <div className="checklist-item-checkbox ">
                     <span className="icon-sm-checkbox icon-check checklist-item-checkbox-check">

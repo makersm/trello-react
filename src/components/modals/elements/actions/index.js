@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClone } from '@fortawesome/free-regular-svg-icons';
+import { faClone, faUser, faCheckSquare, faFileExcel, faArrowAltCircleRight, faCopy } from '@fortawesome/free-regular-svg-icons';
+import { ActionItem } from '../index';
 
 
 const InlineStyle = () => (
@@ -85,27 +86,110 @@ const InlineStyle = () => (
 );
 
 /**
+ * From title to status converter
+ * @param text
+ * @returns {string}
+ */
+let converter = (text) => {
+    switch (text) {
+        case 'ACTIONS':
+            return 'actions';
+        case 'ADD TO CARD':
+            return 'addToCard';
+    };
+};
+
+/**
+ * Sublist using type
+ * @type {{addToCard: {items: *[]}, actions: {items: *[]}}}
+ */
+const type = {
+    addToCard: {
+        items: [
+            // {text: 'Members', icon: faUser},
+            // {text: 'Labels', icon: {}},
+            {text: 'Checklist', icon: faCheckSquare},
+            // {text: 'Due Date', icon: {}},
+            {text: 'Attachment', icon: faFileExcel},
+        ]
+    },
+
+    actions: {
+        items: [
+            {text: 'Move', icon: faArrowAltCircleRight},
+            {text: 'Copy', icon: faCopy },
+            {text: 'Share', icon: faClone},
+        ]
+    },
+};
+
+/**
+ * Default propTypes
+ * @type {{title: React.Validator<T>}}
+ */
+const propTypes = {
+    title: PropTypes.string.isRequired,
+};
+
+/**
  * Action that display in card detail modal's left side
  */
 class Actions extends Component {
     constructor(props) {
         super(props);
+        this.state = this.setStateFromProps(props);
+    }
+
+    /**
+     * Change state by props
+     * state :: status, items
+     * @param nextProps
+     * @param prevState
+     * @returns {*}
+     */
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if(converter(nextProps.title) !== prevState.status) {
+            return this.setStateFromProps(nextProps);
+        }
+
+        return null;
+    }
+
+    /**
+     * State Setter
+     * @param props
+     * @returns {{status: string, items: DataTransferItemList}}
+     */
+    setStateFromProps(props) {
+        const status = converter(props.title);
+        return { status : status, items: type[status].items };
+    }
+
+    /**
+     * ActionItems List Getter
+     * @returns {*}
+     */
+    getActionItems() {
+        const { items } = this.state;
+        return items.map((data, index) => {
+            return (
+                <ActionItem key={data.text} icon={data.icon} text={data.text} />
+            );
+        });
     }
 
     render() {
+        const {title} = this.props;
+        let actionItems = this.getActionItems();
         return (
             <div className="window-module u-clearfix">
                 <InlineStyle />
-                <h3 className="mod-no-top-margin">ACTIONS</h3>
-                <a className="button-link">
-                    <span className="icon-sm">
-                        <FontAwesomeIcon icon={faClone} />
-                    </span>
-                    <span>Share</span>
-                </a>
+                <h3 className="mod-no-top-margin">{title}</h3>
+                {actionItems}
             </div>
         );
     }
 }
 
+Actions.propTypes = propTypes;
 export default Actions;

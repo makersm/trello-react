@@ -4,6 +4,7 @@ const InlineStyle = () => (
     <style>{`
 .phenom {
     border-bottom: 1px solid rgba(9,45,66,.13);
+    margin-left: 40px;
     min-height: 32px;
     padding: 12px 0;
     position: relative;

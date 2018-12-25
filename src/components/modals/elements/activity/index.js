@@ -19,12 +19,14 @@ class Activity extends Component {
 
     render() {
         return (
-            <div className="window-module-title window-module-title-no-divider">
+            <div className="window-module">
                 <InlineStyle />
-                <span className="window-module-title-icon icon-lg">
-                    <FontAwesomeIcon icon={faComments} />
-                </span>
-                <h3>Activity</h3>
+                <div className="window-module-title window-module-title-no-divider">
+                    <span className="window-module-title-icon icon-lg">
+                        <FontAwesomeIcon icon={faComments} />
+                    </span>
+                    <h3>Activity</h3>
+                </div>
                 <div>
                     <ActivityItem />
                     <ActivityItem />
