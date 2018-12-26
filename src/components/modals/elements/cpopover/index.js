@@ -38,7 +38,7 @@ class CPopover extends Component {
     handleOutsideClick(event) {
         const domNode = ReactDOM.findDOMNode(this.popoverRef)
         if(domNode.contains(event.target)) {
-            if(!this.state.isShow) { //#### if first init
+            if(!this.state.isShow) { //#### If first init
                 this.setState({
                     ...this.state,
                     isShow: true,
@@ -48,7 +48,7 @@ class CPopover extends Component {
             }
         }
 
-        if (!domNode.contains(event.target)) { //### if click outside
+        if (!domNode.contains(event.target)) { //### If click outside
             if(this.state.isShow) {
                 this.setState({
                     ...this.state,

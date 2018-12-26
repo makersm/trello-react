@@ -10,7 +10,7 @@ class AddCheckList extends Component {
         this.onInputValueChange = this.onInputValueChange.bind(this);
         this.onHandleClick = this.onHandleClick.bind(this);
     }
-
+z
     onInputValueChange(event) {
         this.setState({
             ...this.state,

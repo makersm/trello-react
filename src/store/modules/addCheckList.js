@@ -26,7 +26,7 @@ export default function addCheckList(state = initialState, action) {
         case ADDCHECKLIST:
             let titles = state.titles.slice(0);
             titles.push(action.title);
-            
+
             const value = {
                 ...state,
                 titles,
