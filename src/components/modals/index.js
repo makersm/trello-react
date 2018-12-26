@@ -1,6 +1,6 @@
 import ModalDetail from './detail';
 
-import {Actions, CheckList, CheckListItem, Activity, ActivityItem, AddComment, ActionItem } from './elements';
+import {Actions, CheckList, CheckListItem, Activity, ActivityItem, AddComment, ActionItem, CPopover, AddCheckList } from './elements';
 
 export {
     ModalDetail,
@@ -11,4 +11,6 @@ export {
     Activity,
     ActivityItem,
     AddComment,
+    CPopover,
+    AddCheckList,
 };

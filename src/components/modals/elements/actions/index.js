@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import { faClone, faUser, faCheckSquare, faFileExcel, faArrowAltCircleRight, faCopy } from '@fortawesome/free-regular-svg-icons';
-import { ActionItem } from '../index';
+import { ActionItem, CPopover } from '../index';
+
+import {AddCheckListContainer} from '../../../../containers';
+
+import Popover from 'react-awesome-popover';
 
 
 const InlineStyle = () => (
@@ -82,6 +86,25 @@ const InlineStyle = () => (
         .button-link>.icon-sm {
             margin: 0 4px 0 -4px;
         }
+        
+.popover-content {
+    background-color: #fff;
+    padding:10px;
+    border-radius: 3px;
+    width: 200px;
+    box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 2px 4px rgba(16, 22, 26, 0.2), 0 8px 24px rgba(16, 22, 26, 0.2);
+}
+
+.popover-content input[type=email], .popover-content input[type=password], .popover-content input[type=text] {
+    margin: 4px 0 12px;
+    width: 100%;
+    font-size: 18px;
+    border-radios: 2px;
+}
+
+.popover-arrow {
+    transform: rotate(-90deg);
+}
     `}</style>
 );
 
@@ -108,9 +131,10 @@ const type = {
         items: [
             // {text: 'Members', icon: faUser},
             // {text: 'Labels', icon: {}},
-            {text: 'Checklist', icon: faCheckSquare},
+            {text: 'Checklist', icon: faCheckSquare,
+                pContent: <AddCheckListContainer />},
             // {text: 'Due Date', icon: {}},
-            {text: 'Attachment', icon: faFileExcel},
+            // {text: 'Attachment', icon: faFileExcel},
         ]
     },
 
@@ -141,28 +165,13 @@ class Actions extends Component {
     }
 
     /**
-     * Change state by props
-     * state :: status, items
-     * @param nextProps
-     * @param prevState
-     * @returns {*}
-     */
-    static getDerivedStateFromProps(nextProps, prevState) {
-        if(converter(nextProps.title) !== prevState.status) {
-            return this.setStateFromProps(nextProps);
-        }
-
-        return null;
-    }
-
-    /**
      * State Setter
      * @param props
      * @returns {{status: string, items: DataTransferItemList}}
      */
     setStateFromProps(props) {
         const status = converter(props.title);
-        return { status : status, items: type[status].items };
+        return { status : status, items: type[status].items, renderChild: true };
     }
 
     /**
@@ -172,8 +181,10 @@ class Actions extends Component {
     getActionItems() {
         const { items } = this.state;
         return items.map((data, index) => {
+            let actionitem = <ActionItem key={data.text} icon={data.icon} text={data.text} />;
+            let content = 'pContent' in data ? data.pContent : <div>content</div>;
             return (
-                <ActionItem key={data.text} icon={data.icon} text={data.text} />
+                <CPopover key={data.text} actionitem={actionitem} content={content}/>
             );
         });
     }

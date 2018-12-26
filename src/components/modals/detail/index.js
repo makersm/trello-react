@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle, faFile, faCheckSquare, faComments } from '@fortawesome/free-regular-svg-icons';
 import { faTrello } from '@fortawesome/free-brands-svg-icons';
 
+import {CheckListContainer} from '../../../containers';
+
 const InlineStyle = () => (
     <style>{`
         .window-overlay {
@@ -26,7 +28,6 @@ const InlineStyle = () => (
             border-radius: 2px;
             display: none;
             margin: 48px 0 80px;
-            overflow: hidden;
             position: relative;
             width: 768px;
             z-index: 25;
@@ -123,8 +124,8 @@ const InlineStyle = () => (
             float: right;
             padding: 8px 16px 8px 8px;
             width: 168px;
-            overflow: hidden;
             z-index: 10;
+            height: -webkit-fill-available;
         }
     `}</style>
 );
@@ -172,7 +173,7 @@ class ModalDetail extends Component {
      * @param event
      */
     closeModalIfOverlayed(event) {
-        if(!this.modalRef.contains(event.target)) {
+        if(this.modalRef && !this.modalRef.contains(event.target)) {
             this.setState({
                 status: "close"
             });
@@ -217,7 +218,7 @@ class ModalDetail extends Component {
                                 </div>
                             </div>
                             <div className="checklist-list window-module">
-                                <CheckList />
+                                <CheckListContainer />
                             </div>
                             <div>
                                 <AddComment />

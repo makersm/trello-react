@@ -128,6 +128,16 @@ class CheckListItem extends Component {
     }
 
     /**
+     * Prevent unnesaccery update
+     * @param nextProps
+     * @param nextState
+     * @returns {boolean}
+     */
+    shouldComponentUpdate(nextProps, nextState) {
+        return nextState !== this.state;
+    }
+
+    /**
      * Set State using Props
      * @param props
      * @returns {{status: string}}

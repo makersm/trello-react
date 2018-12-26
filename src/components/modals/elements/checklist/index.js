@@ -96,6 +96,8 @@ class CheckList extends Component {
 
     render() {
         const {percent} = this.state;
+        const {title} = this.props;
+
         return (
             <div className="checklist">
                 <InlineStyle />
@@ -103,7 +105,7 @@ class CheckList extends Component {
                     <span className="window-module-title-icon icon-lg icon-checklist">
                         <FontAwesomeIcon icon={faCheckSquare} />
                     </span>
-                    <h3>개발</h3>
+                    <h3>{title}</h3>
                     </div>
                     <div className="checklist-progress">
                         <span className="checklist-progress-percentage">{`${percent}%`}</span>
