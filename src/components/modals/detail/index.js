@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CheckList, CheckListItem, Actions, Activity, AddComment } from '../index';
+import { CheckList, CheckListItem, Actions, Activity, AddComment, AddText, EditableText } from '../index';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimesCircle, faFile, faCheckSquare, faComments } from '@fortawesome/free-regular-svg-icons';
@@ -151,12 +151,16 @@ const type = {
 class ModalDetail extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             status : "open",
+            description: '',
+            descriptionElementName: 'AddText'
         };
         this.closeModal = this.closeModal.bind(this); //### Close When Clicked Modal Close button
         this.closeModalIfOverlayed = this.closeModalIfOverlayed.bind(this); //### Close When Click Modal Outside Part
         this.setModalRef = this.setModalRef.bind(this); //### Modal Ref
+        this.setDescription = this.setDescription.bind(this);
     }
 
     /**
@@ -180,6 +184,16 @@ class ModalDetail extends Component {
         }
     }
 
+    setDescription(value) {
+        if(!value) return;
+
+        this.setState({
+            ...this.state,
+            description: value,
+            descriptionElementName: 'EditableText'
+        })
+    }
+
     /**
      * Modal Ref Setter
      * @param modal
@@ -189,7 +203,9 @@ class ModalDetail extends Component {
     }
 
     render() {
-        const {status} = this.state;
+        const {status, description, descriptionElementName} = this.state;
+        const descriptionElement = descriptionElementName == 'AddText' ?
+            <AddText onSubmit={this.setDescription} /> : <EditableText text={description} />;
 
         return (
             <div className="window-overlay" style={{display: type[status].windowOverlayStyle}} onClick={this.closeModalIfOverlayed}>
@@ -215,6 +231,8 @@ class ModalDetail extends Component {
                                         <FontAwesomeIcon icon={faFile} />
                                     </span>
                                     <h3>Description</h3>
+                                    <hr/>
+                                    {descriptionElement}
                                 </div>
                             </div>
                             <div className="checklist-list window-module">

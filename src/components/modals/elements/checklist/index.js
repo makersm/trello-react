@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
-import { CheckListItem } from '../index';
+import { CheckListItem, EditableText, AddText } from '../index';
 
 const InlineStyle = () => (
     <style>{`
@@ -49,8 +49,16 @@ const InlineStyle = () => (
             background: #61bd4f;
         }
        
+       .delete-checklist {
+            float:right;
+        }
     `}</style>
 );
+
+const STATUS = {
+    ALIVE: 1,
+    REMOVE: 2,
+};
 
 /**
  * Card Detail Modal's CheckList
@@ -59,11 +67,21 @@ class CheckList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            percent: "66",
-            checkListItemTotal: 3,
-            checkListItemDone: 2,
+            status: STATUS.ALIVE,
+            percent: "0",
+            checkListItemTotal: 0,
+            checkListItemDone: 0,
+            checkListItems: [{
+                title: '',
+                status: ''
+            }],
         }
+
         this.setPercentageChange = this.setPercentageChange.bind(this);
+        this.getCheckListItems = this.getCheckListItems.bind(this);
+        this.removeThis = this.removeThis.bind(this);
+        this.addNewCheckListItem = this.addNewCheckListItem.bind(this);
+        this.handleItemDelete = this.handleItemDelete.bind(this);
     }
 
     componentDidMount() {
@@ -86,7 +104,7 @@ class CheckList extends Component {
                 break;
         }
 
-        const percent = Math.floor(checkListItemDone / checkListItemTotal * 100);
+        const percent = checkListItemTotal > 0 ? Math.floor(checkListItemDone / checkListItemTotal * 100) : 0;
         this.setState({
             ...this.state,
             percent,
@@ -94,28 +112,90 @@ class CheckList extends Component {
         });
     }
 
+    getCheckListItems() {
+        return this.state.checkListItems.map((data, index) => {
+            if(data.title) {
+                return (
+                    <CheckListItem title={data.title} status={data.status} key={index} handleClick={this.setPercentageChange} onDelete={this.handleItemDelete}/>
+                );
+            }
+        });
+    }
+
+    handleItemDelete(status) {
+        let {checkListItemTotal, checkListItemDone} =  this.state;
+
+        switch (status) {
+            case 'checked':
+                checkListItemDone--;
+                break;
+            case 'unchecked':
+                break;
+        }
+
+        checkListItemTotal--;
+        const percent = checkListItemTotal > 0 ? Math.floor(checkListItemDone / checkListItemTotal * 100) : 0;
+        this.setState({
+            ...this.state,
+            percent,
+            checkListItemDone,
+            checkListItemTotal
+        });
+    }
+
+    removeThis() {
+        this.setState({
+            ...this.state,
+            status: STATUS.REMOVE,
+        });
+    }
+
+    addNewCheckListItem(value) {
+        const {checkListItems, checkListItemDone} = this.state;
+        let {checkListItemTotal} = this.state;
+        checkListItems.push({
+            title: value,
+            status: 'unchecked',
+        });
+
+        checkListItemTotal = checkListItemTotal+1;
+        const percent = checkListItemTotal > 0 ? Math.floor(checkListItemDone / checkListItemTotal * 100) : 0;
+        this.setState((state) => ({
+            ...state,
+            checkListItemTotal: state.checkListItemTotal+1,
+            percent,
+            checkListItems
+        }));
+    }
+
     render() {
-        const {percent} = this.state;
+        const {status, percent} = this.state;
         const {title} = this.props;
+        const checkListItems = this.getCheckListItems();
 
         return (
-            <div className="checklist">
+            <div className="checklist" style={{'display': status === STATUS.ALIVE ? 'block': 'none'}}>
                 <InlineStyle />
                 <div className="window-module-title window-module-title-no-divider u-clearfix">
                     <span className="window-module-title-icon icon-lg icon-checklist">
                         <FontAwesomeIcon icon={faCheckSquare} />
                     </span>
-                    <h3>{title}</h3>
-                    </div>
+                    <EditableText text={title}/>
+                    <a href="javascript:;" className="quiet delete-checklist" onClick={this.removeThis} >
+                        Delete..
+                    </a>
+                </div>
                     <div className="checklist-progress">
                         <span className="checklist-progress-percentage">{`${percent}%`}</span>
                         <div className="checklist-progress-bar" >
                         <div className="checklist-progress-bar-current checklist-progress-bar-current-complete" style={{width: `${percent}%`}}></div>
                     </div>
                     <div className="checklist-items-list">
-                        <CheckListItem status="checked" handleClick={this.setPercentageChange} />
-                        <CheckListItem status="unchecked" handleClick={this.setPercentageChange}/>
-                        <CheckListItem status="checked" handleClick={this.setPercentageChange}/>
+                        {checkListItems}
+                        <hr/>
+                        <div style={{'marginLeft': '40px'}}>
+                            <AddText onSubmit={this.addNewCheckListItem}/>
+                        </div>
                     </div>
                 </div>
             </div>

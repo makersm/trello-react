@@ -29,6 +29,7 @@ class CheckListContainer extends Component {
         const { titles } = this.props;
         return titles.map((data, index) => {
             if(data) {
+                //TODO 한글 key = id
                 return ( <CheckList title={data} key={index} /> );
             }
         });
@@ -36,6 +37,7 @@ class CheckListContainer extends Component {
 
     render() {
         const checkLists = this.getCheckLists();
+        console.log(checkLists);
 
         return (
             <div>

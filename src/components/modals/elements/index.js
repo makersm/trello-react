@@ -7,6 +7,8 @@ import ActivityItem from './activityitem';
 import AddComment from './addcomment';
 import CPopover from './cpopover';
 import AddCheckList from './addchecklist';
+import EditableText from './editabletext';
+import AddText from './addtext';
 
 export {
     CheckList,
@@ -18,4 +20,6 @@ export {
     AddComment,
     CPopover,
     AddCheckList,
+    EditableText,
+    AddText,
 };

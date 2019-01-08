@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import {EditableText} from '../index';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare } from '@fortawesome/free-regular-svg-icons';
 
@@ -117,6 +119,11 @@ const type = {
     }
 };
 
+const STATUS = {
+    ALIVE: 1,
+    REMOVE: 2,
+};
+
 /**
  * Card Modal's CheckList Item
  */
@@ -125,6 +132,7 @@ class CheckListItem extends Component {
         super(props);
         this.state = this.setStateFromProps(props);
         this.setStateChange = this.setStateChange.bind(this);
+        this.onHandleDelete = this.onHandleDelete.bind(this);
     }
 
     /**
@@ -147,7 +155,7 @@ class CheckListItem extends Component {
         if('status' in props){
             status = props.status;
         }
-        return { status : status };
+        return { status : status, condition : STATUS.ALIVE };
     }
 
     /**
@@ -156,26 +164,40 @@ class CheckListItem extends Component {
     setStateChange() {
         var typeToChange = this.state.status == "unchecked" ? "checked" : "unchecked";
         this.setState({
+            ...this.state,
             status : typeToChange
         });
 
         this.props.handleClick(typeToChange);
     }
 
+    onHandleDelete() {
+        const {onDelete} = this.props;
+
+        this.setState({
+            ...this.state,
+            condition : STATUS.REMOVE
+        });
+
+        onDelete(this.state.status);
+    }
+
     render() {
-        const {status} = this.state;
+        const {status, condition} = this.state;
+        const {title} = this.props;
+
         return (
-            <div className={`checklist-item ${type[status].className}`} onClick={this.setStateChange}>
+            <div className={`checklist-item ${type[status].className}`} style={{'display': condition === STATUS.ALIVE ? 'block': 'none'}}>
                 <InlineStyle />
                 <div className="checklist-item-checkbox ">
-                    <span className="icon-sm-checkbox icon-check checklist-item-checkbox-check">
+                    <span className="icon-sm-checkbox icon-check checklist-item-checkbox-check" onClick={this.setStateChange}>
                         {type[status].checkIcon}
                     </span>
                 </div>
                 <div className="checklist-item-details">
                     <div className="checklist-item-row">
                         <span className="checklist-item-details-text markeddown">
-                            테스트
+                            <EditableText text={title} onDelete={this.onHandleDelete}/>
                         </span>
                     </div>
                 </div>

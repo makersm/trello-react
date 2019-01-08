@@ -16,6 +16,7 @@ class AddCheckListContainer extends Component {
 
     handleSubmit(title) {
         const { propAddCheckList } = this.props;
+        //TODO 한글 PUSH to Server and get id
         propAddCheckList(title); //### Use Reducer to set store state
     };
 
